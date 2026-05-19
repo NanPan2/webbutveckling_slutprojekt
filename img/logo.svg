@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Sol (bakgrund) -->
+  <circle cx="130" cy="70" r="35" fill="#FFD93D"/>
+  <!-- Solstrålar -->
+  <g stroke="#FFD93D" stroke-width="4" stroke-linecap="round">
+    <line x1="130" y1="25" x2="130" y2="15"/>
+    <line x1="130" y1="115" x2="130" y2="125"/>
+    <line x1="85" y1="70" x2="75" y2="70"/>
+    <line x1="175" y1="70" x2="185" y2="70"/>
+    <line x1="98" y1="38" x2="91" y2="31"/>
+    <line x1="162" y1="102" x2="169" y2="109"/>
+    <line x1="162" y1="38" x2="169" y2="31"/>
+    <line x1="98" y1="102" x2="91" y2="109"/>
+  </g>
+  <!-- Moln (förgrund) -->
+  <g fill="white">
+    <circle cx="70" cy="120" r="35"/>
+    <circle cx="105" cy="105" r="30"/>
+    <circle cx="135" cy="120" r="28"/>
+    <rect x="55" y="120" width="95" height="35" rx="15"/>
+  </g>
+  <!-- Text -->
+  <text x="100" y="185" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="18" font-weight="bold" fill="#667eea">VäderKollen</text>
+</svg>
