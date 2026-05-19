@@ -1,0 +1,191 @@
+/* ==============================
+   VäderKollen - Anpassad CSS
+   ============================== */
+
+/* Grundläggande styling */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(10px);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Sökkortet */
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-title {
+    color: #333;
+}
+
+/* Sökfältet */
+#city-input {
+    border-radius: 10px 0 0 10px;
+    border: 2px solid #667eea;
+}
+
+#city-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    border-color: #667eea;
+}
+
+.input-group .btn {
+    border-radius: 0 10px 10px 0;
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.input-group .btn:hover {
+    background-color: #5a6fd6;
+    border-color: #5a6fd6;
+}
+
+/* Väderkort */
+.weather-card {
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Väderikon */
+.weather-icon-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.weather-icon {
+    width: 80px;
+    height: 80px;
+    filter: brightness(0) invert(1);
+}
+
+/* Temperaturvisning */
+.display-4 {
+    color: #333;
+}
+
+/* Prognoskort */
+.forecast-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 15px 10px;
+    text-align: center;
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+.forecast-card:hover {
+    transform: translateY(-3px);
+}
+
+.forecast-card img {
+    width: 50px;
+    height: 50px;
+}
+
+.forecast-card .day-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.forecast-card .temp {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+/* Felmeddelande animation */
+.alert {
+    border-radius: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Footer */
+footer {
+    background: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Animationer */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#weather-result .card,
+#forecast-section {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Laddningsindikator */
+#loading {
+    color: white;
+}
+
+#loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    color: white !important;
+}
+
+#loading p {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Responsiv design */
+@media (max-width: 576px) {
+    .weather-icon-container {
+        width: 90px;
+        height: 90px;
+    }
+
+    .weather-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .display-4 {
+        font-size: 2.5rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .forecast-card {
+        margin-bottom: 10px;
+    }
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VäderKollen - Din Väderapp</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Egen CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-cloud-sun-fill me-2"></i>VäderKollen
+            </a>
+        </div>
+    </nav>
+
+    <!-- Huvudinnehåll -->
+    <main class="container my-5">
+        <!-- Söksektion -->
+        <section class="row justify-content-center mb-5">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h1 class="card-title text-center mb-4">Sök väder</h1>
+                        <form id="search-form">
+                            <div class="input-group input-group-lg">
+                                <input 
+                                    type="text" 
+                                    id="city-input" 
+                                    class="form-control" 
+                                    placeholder="Ange stad, t.ex. Stockholm"
+                                    aria-label="Stad"
+                                    required
+                                >
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-search"></i> Sök
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Laddningsindikator -->
+        <section id="loading" class="text-center d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Laddar...</span>
+            </div>
+            <p class="mt-2 text-muted">Hämtar väderdata...</p>
+        </section>
+
+        <!-- Felmeddelande -->
+        <section id="error-message" class="row justify-content-center d-none">
+            <div class="col-md-8 col-lg-6">
+                <div class="alert alert-danger text-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span id="error-text">Kunde inte hitta staden. Försök igen.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Väderresultat -->
+        <section id="weather-result" class="row justify-content-center d-none">
+            <div class="col-md-8 col-lg-6">
+                <div class="card weather-card shadow">
+                    <div class="card-body text-center p-4">
+                        <!-- Stadsnamn och land -->
+                        <h2 id="city-name" class="card-title mb-1">Stockholm</h2>
+                        <p id="country" class="text-muted mb-3">Sverige</p>
+
+                        <!-- Väderikon och temperatur -->
+                        <div class="weather-icon-container mb-3">
+                            <img id="weather-icon" src="" alt="Väderikon" class="weather-icon">
+                        </div>
+                        <h3 id="temperature" class="display-4 fw-bold mb-1">15°C</h3>
+                        <p id="description" class="text-capitalize text-muted fs-5">Molnigt</p>
+
+                        <!-- Detaljerad info -->
+                        <hr>
+                        <div class="row text-center mt-3">
+                            <div class="col-4">
+                                <i class="bi bi-thermometer-half text-danger fs-4"></i>
+                                <p class="mb-0 fw-bold" id="feels-like">13°C</p>
+                                <small class="text-muted">Känns som</small>
+                            </div>
+                            <div class="col-4">
+                                <i class="bi bi-droplet-fill text-info fs-4"></i>
+                                <p class="mb-0 fw-bold" id="humidity">72%</p>
+                                <small class="text-muted">Luftfuktighet</small>
+                            </div>
+                            <div class="col-4">
+                                <i class="bi bi-wind text-success fs-4"></i>
+                                <p class="mb-0 fw-bold" id="wind-speed">5 m/s</p>
+                                <small class="text-muted">Vind</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5-dagars prognos -->
+        <section id="forecast-section" class="row justify-content-center mt-4 d-none">
+            <div class="col-md-10 col-lg-8">
+                <h3 class="text-center mb-3">5-dagars prognos</h3>
+                <div id="forecast-cards" class="row g-2 justify-content-center">
+                    <!-- Prognoskort fylls i av JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-1">VäderKollen &copy; 2025 - Slutprojekt Webbutveckling</p>
+            <p class="mb-0 small text-muted">Väderdata från <a href="https://openweathermap.org/" class="text-info" target="_blank">OpenWeatherMap</a></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Egen JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
