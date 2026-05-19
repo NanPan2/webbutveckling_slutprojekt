@@ -4,7 +4,7 @@
 
 // API-nyckel från OpenWeatherMap (gratis konto)
 // OBS: Byt ut mot din egen nyckel från https://openweathermap.org/api
-const API_KEY = "din_api_nyckel_här";
+const API_KEY = "0064c26ae4a2de8c016d48892abe7055";
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 
 // DOM-element
