@@ -1,188 +1,104 @@
-// ==============================
-// VäderKollen - JavaScript
-// ==============================
+// Väderapp
 
-// API-nyckel från OpenWeatherMap (gratis konto)
-// OBS: Byt ut mot din egen nyckel från https://openweathermap.org/api
-const API_KEY = "36587143dbc03301e839d6041abc3b40";
-const BASE_URL = "https://api.openweathermap.org/data/2.5";
+const apiKey = "36587143dbc03301e839d6041abc3b40";
 
-// DOM-element
-const searchForm = document.getElementById("search-form");
-const cityInput = document.getElementById("city-input");
-const loadingSection = document.getElementById("loading");
-const errorSection = document.getElementById("error-message");
-const errorText = document.getElementById("error-text");
-const weatherResult = document.getElementById("weather-result");
-const forecastSection = document.getElementById("forecast-section");
+const form = document.getElementById("search-form");
+const input = document.getElementById("city-input");
 
-// Event Listener - Lyssna på formuläret
-searchForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // Förhindra sidladdning
-    const city = cityInput.value.trim();
-
-    if (city) {
-        fetchWeather(city);
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const city = input.value;
+    if (city != "") {
+        getWeather(city);
+        getForecast(city);
     }
 });
 
-// Hämta aktuellt väder från API
-async function fetchWeather(city) {
-    // Visa laddning, dölj andra sektioner
-    showLoading();
+function getWeather(city) {
+    document.getElementById("loading").classList.remove("d-none");
+    document.getElementById("error-message").classList.add("d-none");
 
-    try {
-        // Hämta aktuellt väder
-        const weatherResponse = await fetch(
-            `${BASE_URL}/weather?q=${encodeURIComponent(city)}&units=metric&lang=sv&appid=${API_KEY}`
-        );
+    let url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&lang=sv&appid=" + apiKey;
 
-        if (!weatherResponse.ok) {
-            if (weatherResponse.status === 404) {
-                throw new Error("Staden kunde inte hittas. Kontrollera stavningen och försök igen.");
-            } else if (weatherResponse.status === 401) {
-                throw new Error("API-nyckeln är ogiltig. Se README för instruktioner.");
-            } else {
-                throw new Error("Något gick fel. Försök igen senare.");
+    fetch(url)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error("Hittade inte staden");
             }
-        }
-
-        const weatherData = await weatherResponse.json();
-        displayWeather(weatherData);
-
-        // Hämta 5-dagars prognos
-        const forecastResponse = await fetch(
-            `${BASE_URL}/forecast?q=${encodeURIComponent(city)}&units=metric&lang=sv&appid=${API_KEY}`
-        );
-
-        if (forecastResponse.ok) {
-            const forecastData = await forecastResponse.json();
-            displayForecast(forecastData);
-        }
-
-    } catch (error) {
-        showError(error.message);
-    }
+            return response.json();
+        })
+        .then(function(data) {
+            showWeather(data);
+        })
+        .catch(function(error) {
+            showError(error.message);
+        });
 }
 
-// Visa väderdata på sidan
-function displayWeather(data) {
-    // Dölj laddning och fel
-    hideLoading();
-    hideError();
+function getForecast(city) {
+    let url = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric&lang=sv&appid=" + apiKey;
 
-    // Fyll i data
+    fetch(url)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            showForecast(data);
+        });
+}
+
+function showWeather(data) {
+    document.getElementById("loading").classList.add("d-none");
     document.getElementById("city-name").textContent = data.name;
-    document.getElementById("country").textContent = getCountryName(data.sys.country);
-    document.getElementById("temperature").textContent = `${Math.round(data.main.temp)}°C`;
+    document.getElementById("country").textContent = data.sys.country;
+    document.getElementById("temperature").textContent = Math.round(data.main.temp) + "°C";
     document.getElementById("description").textContent = data.weather[0].description;
-    document.getElementById("feels-like").textContent = `${Math.round(data.main.feels_like)}°C`;
-    document.getElementById("humidity").textContent = `${data.main.humidity}%`;
-    document.getElementById("wind-speed").textContent = `${data.wind.speed} m/s`;
+    document.getElementById("feels-like").textContent = Math.round(data.main.feels_like) + "°C";
+    document.getElementById("humidity").textContent = data.main.humidity + "%";
+    document.getElementById("wind-speed").textContent = data.wind.speed + " m/s";
 
-    // Sätt väderikon
-    const iconCode = data.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-    document.getElementById("weather-icon").src = iconUrl;
-    document.getElementById("weather-icon").alt = data.weather[0].description;
+    const icon = data.weather[0].icon;
+    document.getElementById("weather-icon").src = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
 
-    // Visa resultat
-    weatherResult.classList.remove("d-none");
+    document.getElementById("weather-result").classList.remove("d-none");
 }
 
-// Visa 5-dagars prognos
-function displayForecast(data) {
-    const forecastCards = document.getElementById("forecast-cards");
-    forecastCards.innerHTML = ""; // Rensa gamla kort
+function showForecast(data) {
+    const cards = document.getElementById("forecast-cards");
+    cards.innerHTML = "";
 
-    // Filtrera till en prognos per dag (kl 12:00)
-    const dailyForecasts = data.list.filter(function (item) {
+    // ta bara en prognos per dag (kl 12)
+    const days = data.list.filter(function(item) {
         return item.dt_txt.includes("12:00:00");
     });
 
-    // Skapa kort för varje dag (max 5)
-    const daysToShow = dailyForecasts.slice(0, 5);
+    const dayNames = ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"];
 
-    daysToShow.forEach(function (day) {
+    for (let i = 0; i < days.length; i++) {
+        const day = days[i];
         const date = new Date(day.dt * 1000);
-        const dayName = getDayName(date);
+        const name = dayNames[date.getDay()];
         const temp = Math.round(day.main.temp);
         const icon = day.weather[0].icon;
-        const description = day.weather[0].description;
 
-        const cardHTML = `
+        cards.innerHTML += `
             <div class="col-6 col-md">
                 <div class="forecast-card shadow-sm">
-                    <p class="day-name mb-1">${dayName}</p>
-                    <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${description}">
+                    <p class="day-name mb-1">${name}</p>
+                    <img src="https://openweathermap.org/img/wn/${icon}@2x.png">
                     <p class="temp mb-0">${temp}°C</p>
-                    <small class="text-muted text-capitalize">${description}</small>
                 </div>
             </div>
         `;
+    }
 
-        forecastCards.innerHTML += cardHTML;
-    });
-
-    // Visa prognossektionen
-    forecastSection.classList.remove("d-none");
+    document.getElementById("forecast-section").classList.remove("d-none");
 }
 
-// Hjälpfunktioner
-
-function showLoading() {
-    loadingSection.classList.remove("d-none");
-    weatherResult.classList.add("d-none");
-    forecastSection.classList.add("d-none");
-    errorSection.classList.add("d-none");
-}
-
-function hideLoading() {
-    loadingSection.classList.add("d-none");
-}
-
-function showError(message) {
-    hideLoading();
-    weatherResult.classList.add("d-none");
-    forecastSection.classList.add("d-none");
-    errorText.textContent = message;
-    errorSection.classList.remove("d-none");
-}
-
-function hideError() {
-    errorSection.classList.add("d-none");
-}
-
-// Hämta veckodagsnamn på svenska
-function getDayName(date) {
-    const days = ["Söndag", "Måndag", "Tisdag", "Onsdag", "Torsdag", "Fredag", "Lördag"];
-    return days[date.getDay()];
-}
-
-// Översätt landskod till landsnamn (vanliga länder)
-function getCountryName(code) {
-    const countries = {
-        SE: "Sverige",
-        NO: "Norge",
-        DK: "Danmark",
-        FI: "Finland",
-        DE: "Tyskland",
-        GB: "Storbritannien",
-        US: "USA",
-        FR: "Frankrike",
-        ES: "Spanien",
-        IT: "Italien",
-        JP: "Japan",
-        CN: "Kina",
-        AU: "Australien",
-        CA: "Kanada",
-        BR: "Brasilien",
-        NL: "Nederländerna",
-        PT: "Portugal",
-        PL: "Polen",
-        RU: "Ryssland",
-        IN: "Indien"
-    };
-
-    return countries[code] || code;
+function showError(msg) {
+    document.getElementById("loading").classList.add("d-none");
+    document.getElementById("weather-result").classList.add("d-none");
+    document.getElementById("forecast-section").classList.add("d-none");
+    document.getElementById("error-text").textContent = msg;
+    document.getElementById("error-message").classList.remove("d-none");
 }
